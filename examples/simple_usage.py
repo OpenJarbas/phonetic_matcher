@@ -1,14 +1,14 @@
 import phonetic_matcher
 
 # match scores
-score = phonetic_matcher.fuzzy_match("mycroft", "microsoft")  # 0.7571428571428571
+score = phonetic_matcher.fuzzy_match("mycroft", "microsoft")  # 0.7400408163265306
 
 score = phonetic_matcher.fuzzy_match("cat", "dog")  # 0.4999999999999999
 
 # best match selection
 query = "mycroft"
 choices = ["microsoft", "minecraft", "mike roft", "mein kampf", "my raft"]
-best, score = phonetic_matcher.best_match(query, choices)  # mike roft 0.9047095761381476
+best, score = phonetic_matcher.best_match(query, choices)  # mike roft 0.9179748822605965
 
 # all matches
 matches = phonetic_matcher.match(query, choices)
