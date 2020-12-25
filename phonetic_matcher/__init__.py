@@ -1,42 +1,21 @@
-import phonetics
-from phonetic_matcher.utils import match_one, fuzzy_match, MatchStrategy
-from phoneme_guesser import get_phonemes
+from phonetic_matcher.phonemes import phoneme_fuzzy_match, phoneme_match, phoneme_best_match
+from phonetic_matcher.metaphone import metaphone_fuzzy_match, metaphone_match, metaphone_best_match
+from phonetic_matcher.string_matching import MatchStrategy, match_one as _m1, match_all as _ma
 
 
-def metaphone_fuzzymatch(x, against, strategy=MatchStrategy.SIMPLE_RATIO):
-    return fuzzy_match(phonetics.metaphone(x),
-                       phonetics.metaphone(against), strategy)
-
-
-def phoneme_fuzzymatch(x, against, lang="en",
-                       strategy=MatchStrategy.SIMPLE_RATIO):
-    ph1 = get_phonemes(x, lang=lang)
-    ph2 = get_phonemes(against, lang=lang)
-    return fuzzy_match(ph1, ph2, strategy)
-
-
-def phonetic_fuzzymatch(x, against, lang="en",
-                        strategy=MatchStrategy.SIMPLE_RATIO):
-    s1 = metaphone_fuzzymatch(x, against, strategy)
-    s2 = phoneme_fuzzymatch(x, against, lang, strategy)
+def fuzzy_match(x, against, lang="en", strategy=MatchStrategy.PARTIAL_TOKEN_SORT_RATIO):
+    s1 = metaphone_fuzzy_match(x, against, strategy)
+    s2 = phoneme_fuzzy_match(x, against, lang, strategy)
     return (s1 + s2) / 2
 
 
-def metaphone_bestmatch(query, choices, strategy=MatchStrategy.SIMPLE_RATIO):
-    return match_one(query, choices, metaphone_fuzzymatch, strategy)
+def best_match(query, choices, lang="en", strategy=MatchStrategy.PARTIAL_TOKEN_SORT_RATIO):
+    def _match(q, c, s):
+        return fuzzy_match(q, c, lang, s)
+    return _m1(query, choices, _match, strategy)
 
 
-def phoneme_bestmatch(query, choices, lang="en",
-                      strategy=MatchStrategy.SIMPLE_RATIO):
-    def match(q, c, s):
-        return phoneme_fuzzymatch(q, c, lang, s)
-
-    return match_one(query, choices, match, strategy)
-
-
-def phonetic_bestmatch(query, choices, lang="en",
-                       strategy=MatchStrategy.SIMPLE_RATIO):
-    def match(q, c, s):
-        return phonetic_fuzzymatch(q, c, lang, s)
-
-    return match_one(query, choices, match, strategy)
+def match(query, choices, lang="en", strategy=MatchStrategy.PARTIAL_TOKEN_SORT_RATIO):
+    def _match(q, c, s):
+        return fuzzy_match(q, c, lang, s)
+    return _ma(query, choices, _match, strategy)
