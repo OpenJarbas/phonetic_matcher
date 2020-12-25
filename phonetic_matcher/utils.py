@@ -1,11 +1,13 @@
 from difflib import SequenceMatcher
 from enum import IntEnum, auto
+import logging
+
 try:
     from rapidfuzz import fuzz
 except ImportError:
     fuzz = None
-    print("WARNING: rapidfuzz is not installed, falling back to "
-          "SequenceMatcher for all match strategies")
+    logging.warning("rapidfuzz is not installed, falling back to "
+                    "SequenceMatcher for all match strategies")
 
 
 class MatchStrategy(IntEnum):
