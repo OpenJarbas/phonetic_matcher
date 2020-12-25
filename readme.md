@@ -18,7 +18,6 @@ score = phonetic_fuzzymatch("hey", "gay")  # 0.3076923076923077
 
 # best match selection
 query = "mycroft"
-choices = ["microsoft", "minecraft", "mike roft",
-           "mein kampf", "my raft"]
+choices = ["microsoft", "minecraft", "mike roft", "mein kampf", "my raft"]
 best, score = phonetic_bestmatch(query, choices) # mike roft 0.8823529411764706
 ```
