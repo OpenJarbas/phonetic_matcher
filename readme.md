@@ -8,6 +8,12 @@ match strings based on how they sound
 pip install phonetic_matcher
 ```
 
+NOTE: rapidfuzz is optional but strongly recommended
+
+```bash
+pip install rapidfuzz
+```
+
 # Usage
 
 ```python
