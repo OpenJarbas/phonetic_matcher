@@ -4,6 +4,8 @@ try:
     from rapidfuzz import fuzz
 except ImportError:
     fuzz = None
+    print("WARNING: rapidfuzz is not installed, falling back to "
+          "SequenceMatcher for all match strategies")
 
 
 class MatchStrategy(IntEnum):
@@ -20,9 +22,6 @@ class MatchStrategy(IntEnum):
 
 def _validate_strategy(strategy):
     if fuzz is None:
-        if strategy == MatchStrategy.SIMPLE_RATIO:
-            print("WARNING: rapidfuzz is not installed, falling back to "
-                  "SequenceMatcher")
         return MatchStrategy.SIMPLE_RATIO
     return strategy
 
